@@ -1,49 +1,80 @@
+"use strict";
 const { test, only } = QUnit;
 
 QUnit.config.reorder = false;
 
-QUnit.assert.functionExists = function (name, argCount, message) {
-  // argCount is optional
-  if (typeof argCount === 'string') {
-    argCount = undefined;
-    message = argCount;
-  }
+// Credit: https://github.com/goatslacker/get-parameter-names
+function getArgNames(fn = "") {
+  const COMMENTS = /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/mg;
+  const DEFAULT_PARAMS = /=[^,]+/mg;
+  const FAT_ARROWS = /=>.*$/mg;
+  const code = fn.toString()
+    .replace(COMMENTS, '')
+    .replace(FAT_ARROWS, '')
+    .replace(DEFAULT_PARAMS, '');
+  const result = code.slice(code.indexOf('(') + 1, code.indexOf(')'))
+    .match(/([^\s,]+)/g);
+  return result === null
+    ? []
+    : result;
+}
 
-  const subject = window[name];
-  const result = typeof subject === 'function';
-  this.pushResult({
-    result,
+// built from multiple lesser online examples
+function ordinal(i) {
+   const ord=['th','st','nd','rd'];
+   const x=i%100;
+   return i+(ord[(x-20)%10]||ord[x]||ord[0]);
+}
+
+
+QUnit.assert.functionExists = function (fnName, argNames = []) {
+  const subject = window[fnName];
+  const realArgNames = getArgNames(subject);
+  let result = true;
+
+  const createResultObject = {
+    expected: `function`,
     actual: typeof subject,
-    expected: "function",
-    message: message || `Expected ${name} to be a function, got a ${ typeof subject }.`
-  });
+    result: typeof subject === 'function',
+    message: `Create a function called '${fnName}'.`
+  };
+  this.pushResult(createResultObject);
+  result = result && typeof subject === 'function';
 
-  if (result && argCount !== undefined) {
-    const tense = (subject.length === argCount) ? 'accepts' : 'must accept';
-    const plural = (1 === argCount) ? 'argument' : 'arguments';
+  for (let i=0; i<argNames.length; i++) {
     this.pushResult({
-      result: subject.length === argCount,
-      actual: subject.length,
-      expected: argCount,
-      message: `The function ${tense} ${ argCount || 'no' } ${plural}.`
+      expected: argNames[i],
+      actual: realArgNames[i],
+      result: argNames[i] === realArgNames[i],
+      message: `The ${ordinal(i+1)} argument should be called '${argNames[i]}'.`
     });
+    result = result && (argNames[i] === realArgNames[i]);
   }
+
+  const argsResult = subject ? subject.length === argNames.length : false;
+  const plural = argNames.length === 1 ? "argument" : "arguments";
+  this.pushResult({
+    expected: argNames.length,
+    actual: subject ? subject.length : 0,
+    result: subject ? subject.length === argNames.length : false,
+    message: `The '${fnName}' function must take ${argNames.length} ${plural}.`
+  });
 
   return result;
 };
 
 
-
 QUnit.assert.explain = function (message, result = true) {
-  this.pushResult({
-    result,
-    message
-  });
+  this.pushResult({ result, message });
 };
 
 if (window.globalErrors.length > 0) {
   test("Global Error", (assert) => {
-    assert.explain('There has been a global error, most probably a syntax error. Look in the Javascript console for details.', false);
+    assert.explain(
+      `There has been a global error, most probably a syntax error.
+       Look in the Javascript console for details.`,
+       false
+     );
   });
 }
 
@@ -51,11 +82,7 @@ test("Easy Start", (assert) => {
   assert.explain(
     `Complete the "easyStart" function so that it always returns true.`
   );
-  if (!assert.functionExists(
-    'easyStart',
-    0,
-    `We have provided an "easyStart" function.`
-  )) return;
+  if (!assert.functionExists('easyStart')) return;
   assert.strictEqual(
     easyStart(),
     true,
@@ -63,16 +90,10 @@ test("Easy Start", (assert) => {
      when passed no parameters.`
   );
   assert.strictEqual(
-    easyStart("port"),
+    easyStart("this should be ignored"),
     true,
-    `The "easyStart" function should return true
-     when passed a string.`
-  );
-  assert.strictEqual(
-    easyStart("❤️"),
-    true,
-    `The "easyStart" function should return true
-     when passed unicode characters.`
+    `The 'easyStart' function specifies no arguments
+     so it should ignore any that are passed.`
   );
 });
 
@@ -82,16 +103,19 @@ test("Hello World", (assert) => {
     `Complete the 'helloWorld' function so that so that it always
      returns the string "hello world".`
   );
-  if (!assert.functionExists(
-    'helloWorld',
-    0,
-    `We have provided a "helloWorld" function.`
-  )) return;
+  if (!assert.functionExists('helloWorld')) return;
   assert.strictEqual(
     helloWorld(),
     "hello world",
     "The helloWorld function should return 'hello world'."
   );
+  assert.strictEqual(
+    helloWorld("this should be ignored"),
+    "hello world",
+    `The 'helloWorld' function specifies no arguments
+     so it should ignore any that are passed.`
+  );
+
 });
 
 
@@ -99,14 +123,10 @@ test("Numbers To Array", (assert) => {
   assert.explain(
     `Change the numToArray function so that so
      that instead of creating an array of numbers
-     from zero to limit, it creates an array of
-     numbers counting down from limit to 1.`
+     from zero to 'limit', it creates an array of
+     numbers counting down from 'limit' to 1.`
   );
-  if (!assert.functionExists(
-    'numToArray',
-    1,
-    `We have provided the 'numToArray' function.`
-  )) return;
+  if (!assert.functionExists( 'numToArray', ['limit'] )) return;
   assert.deepEqual(
     numToArray(5),
     [5, 4, 3, 2, 1],
@@ -132,7 +152,9 @@ test("Hello World 2", (assert) => {
     `Create the function "hw2" which returns an
      array of the strings 'hello' and 'world'.`
   );
-  if (!assert.functionExists('hw2',0)) return;
+
+  if (!assert.functionExists('hw2')) return;
+
   assert.deepEqual(
     hw2(),
     ["hello", "world"],
@@ -153,7 +175,7 @@ test("Greetings", (assert) => {
     `Create a 'greet' function that accepts a name parameter
      and returns the string 'Hello <name> how are you?'.`
   );
-  if (!assert.functionExists('greet', 1)) return;
+  if (!assert.functionExists('greet', ["name"])) return;
   assert.strictEqual(
     greet("Tricia"),
     "Hello Tricia how are you?",
@@ -170,13 +192,13 @@ test("Greetings", (assert) => {
 });
 
 
-test("Positive", (assert) => {
+test("A Positive Sign", (assert) => {
   assert.explain(
     `Create a 'sign' function that accepts one parameter 'x'
     and returns the string 'positive' for x > 0, and the string
     'negative' for x < 0.`
   );
-  if (!assert.functionExists('sign', 1)) return;
+  if (!assert.functionExists('sign', ["x"])) return;
   assert.strictEqual(
     sign(10),
     "positive",
@@ -201,7 +223,7 @@ test("Euros to GB Pounds", (assert) => {
      euros and an exchange rate of how many pounds you get for a euro.
      It should return a number which is the amount in pounds after conversion.`
   );
-  if (!assert.functionExists('eugb', 2)) return;
+  if (!assert.functionExists('eugb', ["euros", "rate"])) return;
   assert.strictEqual(
     eugb(10, 0.9),
     9,
@@ -221,7 +243,7 @@ test("Say N Times", (assert) => {
      a number 'n'.  'nSay' should return an array that contains n copies
      of the value of msg.`
   );
-  if (!assert.functionExists('nSay', 2)) return;
+  if (!assert.functionExists('nSay', ["msg", "n"])) return;
   assert.deepEqual(
     nSay("hello", 1),
     ["hello"],
@@ -240,10 +262,10 @@ test("Say N Times", (assert) => {
 
 test("Word Count", (assert) => {
   assert.explain(
-    `Create a 'wordCount' function that accepts a string and counts how
+    `Create a 'wordCount' function that accepts a string 'str' and counts how
      many words are in it.`
   );
-  if (!assert.functionExists('wordCount', 1)) return
+  if (!assert.functionExists('wordCount', ["str"])) return
   assert.strictEqual(
     wordCount("The cat sat on the mat"),
     6,
@@ -259,10 +281,10 @@ test("Word Count", (assert) => {
 
 test("Character Count", (assert) => {
   assert.explain(
-    `Create a 'charCount' function that accepts a string and counts how many
+    `Create a 'charCount' function that accepts a string 'str' and counts how many
      non-whitespace characters are in it.`
   );
-  if (!assert.functionExists('charCount', 1)) return;
+  if (!assert.functionExists('charCount', ["str"])) return;
   assert.strictEqual(
     charCount("The cat sat on the mat"),
     17,
@@ -283,10 +305,10 @@ test("Character Count", (assert) => {
 
 test("Acronyms", (assert) => {
   assert.explain(
-    `Create an 'acronym' function that accepts a string of words and returns
+    `Create an 'acronym' function that accepts a string 'str' of words and returns
      the acronym formed from the initial letter of each word.`
   );
-  if (!assert.functionExists('acronym', 1)) return;
+  if (!assert.functionExists('acronym', ["str"])) return;
   assert.strictEqual(
     acronym("North Atlantic Treaty Organisation"),
     "NATO",
@@ -308,12 +330,12 @@ test("Acronyms", (assert) => {
 
 test("Abbreviated Names", (assert) => {
   assert.explain(
-    `Create an 'abbreviate' function that accpts an array of strings that
+    `Create an 'abbreviate' function that accpts an array of strings 'arr' that
      represent someone's full name.  The function should return a version
      of the name with all but the last name reduced to initial letters, and
      each initial letter followed by a full stop and a space.`
   );
-  if (!assert.functionExists('abbreviate', 1)) return;
+  if (!assert.functionExists('abbreviate', ["arr"])) return;
   assert.strictEqual(
     abbreviate(["John", "Ronald", "Reuel", "Tolkien"]),
     "J. R. R. Tolkien",
@@ -343,7 +365,7 @@ test("Honours Classification", (assert) => {
        a string that describes the level of honours degree associated with
       that mark.`
   );
-  if (!assert.functionExists('honours', 1)) return;
+  if (!assert.functionExists('honours', ['mark'])) return;
   assert.strictEqual(
     honours(70),
     "First",
@@ -394,10 +416,10 @@ test("Honours Classification", (assert) => {
 
 test("Unique Words", (assert) => {
   assert.explain(
-      `Create a 'uniqueWords' function that accepts a string and returns
-       an array of all the unique words in that string.`
+      `Create a 'uniqueWords' function that accepts a string 'str' and
+       returns an array of all the unique words in that string.`
   );
-  if (!assert.functionExists('uniqueWords', 1)) return;
+  if (!assert.functionExists('uniqueWords', ['str'])) return;
   assert.deepEqual(
     uniqueWords("the cat sat on the mat"),
     ["the", "cat", "sat", "on", "mat"],
@@ -425,7 +447,7 @@ test("Compound Interest", (assert) => {
      a 'duration'.  It should calculate how startAmount increases over time
      as interest is added.`
   );
-  if (!assert.functionExists('compound', 3)) return;
+  if (!assert.functionExists('compound', ['startAmount', 'rate', 'duration'])) return;
   assert.equal(
     impreciseNumber(compound(10, 1.1, 1)),
     impreciseNumber(11),
@@ -452,10 +474,6 @@ function impreciseNumber(x) {
 }
 
 
-// let's not put unique words II right after unique words because otherwise
-// when implementing unique words well, the test page hides unique words
-// and shows unique words II, but the change is subtle and it looks like
-// something about my unique words is wrong
 test("Unique Words II: Mixed Case Matching", (assert) => {
   assert.explain(
       `The 'uniqueWords' function should treat uppercase and
@@ -490,7 +508,7 @@ test("Word Game", (assert) => {
      each character in 'letters' may only be used once when
      constructing the word.`
   );
-  if (!assert.functionExists('wordGame', 2)) return;
+  if (!assert.functionExists('wordGame', ["letters", "word"])) return;
   assert.strictEqual(
     wordGame("a", "a"),
     true,
@@ -531,7 +549,7 @@ test("Can I Pay With Coins?", (assert) => {
     or all of the coin values in the array.  Arrays will always be provided
     sorted with the larger values before smaller ones.`
   );
-  if (!assert.functionExists('pocketCoins', 2)) return;
+  if (!assert.functionExists('pocketCoins', ['coinValues', 'amount'])) return;
   assert.strictEqual(
     pocketCoins([10, 10, 10], 30),
     true,
