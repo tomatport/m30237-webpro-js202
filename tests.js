@@ -2,19 +2,20 @@ const { test, only } = QUnit;
 
 QUnit.config.reorder = false;
 
-QUnit.assert.functionExists = function (subject, argCount, message) {
-  // argCount is optional, message isn't
+QUnit.assert.functionExists = function (name, argCount, message) {
+  // argCount is optional
   if (typeof argCount === 'string') {
     argCount = undefined;
     message = argCount;
   }
 
+  const subject = window[name];
   const result = typeof subject === 'function';
   this.pushResult({
     result,
     actual: typeof subject,
     expected: "function",
-    message: message || `Expected a function, got a ${ typeof subject }.`
+    message: message || `Expected ${name} to be a function, got a ${ typeof subject }.`
   });
 
   if (result && argCount !== undefined) {
@@ -27,6 +28,8 @@ QUnit.assert.functionExists = function (subject, argCount, message) {
       message: `The function ${tense} ${ argCount || 'no' } ${plural}.`
     });
   }
+
+  return result;
 };
 
 
@@ -48,11 +51,11 @@ test("Easy Start", (assert) => {
   assert.explain(
     `Complete the "easyStart" function so that it always returns true.`
   );
-  assert.functionExists(
-    window.easyStart,
+  if (!assert.functionExists(
+    'easyStart',
     0,
     `We have provided an "easyStart" function.`
-  );
+  )) return;
   assert.strictEqual(
     easyStart(),
     true,
@@ -79,11 +82,11 @@ test("Hello World", (assert) => {
     `Complete the 'helloWorld' function so that so that it always
      returns the string "hello world".`
   );
-  assert.functionExists(
-    window.helloWorld,
+  if (!assert.functionExists(
+    'helloWorld',
     0,
     `We have provided a "helloWorld" function.`
-  );
+  )) return;
   assert.strictEqual(
     helloWorld(),
     "hello world",
@@ -99,11 +102,11 @@ test("Numbers To Array", (assert) => {
      from zero to limit, it creates an array of
      numbers counting down from limit to 1.`
   );
-  assert.functionExists(
-    window.numToArray,
+  if (!assert.functionExists(
+    'numToArray',
     1,
     `We have provided the 'numToArray' function.`
-  );
+  )) return;
   assert.deepEqual(
     numToArray(5),
     [5, 4, 3, 2, 1],
@@ -129,7 +132,7 @@ test("Hello World 2", (assert) => {
     `Create the function "hw2" which returns an
      array of the strings 'hello' and 'world'.`
   );
-  assert.functionExists(window.hw2,0);
+  if (!assert.functionExists('hw2',0)) return;
   assert.deepEqual(
     hw2(),
     ["hello", "world"],
@@ -145,16 +148,12 @@ test("Hello World 2", (assert) => {
 });
 
 
-test("greet", (assert) => {
+test("Greetings", (assert) => {
   assert.explain(
     `Create a 'greet' function that accepts a name parameter
      and returns the string 'Hello <name> how are you?'.`
   );
-  assert.functionExists(
-    window.greet,
-    1,
-    "Create a `greet` function..."
-  );
+  if (!assert.functionExists('greet', 1)) return;
   assert.strictEqual(
     greet("Tricia"),
     "Hello Tricia how are you?",
@@ -171,18 +170,58 @@ test("greet", (assert) => {
 });
 
 
+test("Positive", (assert) => {
+  assert.explain(
+    `Create a 'sign' function that accepts one parameter 'x'
+    and returns the string 'positive' for x > 0, and the string
+    'negative' for x < 0.`
+  );
+  if (!assert.functionExists('sign', 1)) return;
+  assert.strictEqual(
+    sign(10),
+    "positive",
+    "10 is positive, so return 'positive'",
+  );
+  assert.strictEqual(
+    sign(-1),
+    "negative",
+    "-1 is negative, so return 'negative'",
+  );
+  assert.strictEqual(
+    sign(-49.3),
+    "negative",
+    "If the first two tests work, this one should too!"
+  );
+});
+
+
+test("Euros to GB Pounds", (assert) => {
+  assert.explain(
+    `Write an 'eugb' function that accepts two parameters: an amount in
+     euros and an exchange rate of how many pounds you get for a euro.
+     It should return a number which is the amount in pounds after conversion.`
+  );
+  if (!assert.functionExists('eugb', 2)) return;
+  assert.strictEqual(
+    eugb(10, 0.9),
+    9,
+    "Ten euros at an exchange rate of 0.9 GBP per EURO gives £9."
+  );
+  assert.strictEqual(
+    eugb(1000, 1.337),
+    1337,
+    "One thousand euros at an exchange rate of 1.337 GBP per EURO gives £1337."
+  );
+});
+
 
 test("Say N Times", (assert) => {
   assert.explain(
     `Write an 'nSay' function that accepts two parameters, a message 'msg' and
-     a number 'n'.  'nSay' should return an array that contains 'n' copies
-     of 'msg'.`
+     a number 'n'.  'nSay' should return an array that contains n copies
+     of the value of msg.`
   );
-  assert.functionExists(
-    window.nSay,
-    2,
-    "Write an 'nSay' function..."
-  );
+  if (!assert.functionExists('nSay', 2)) return;
   assert.deepEqual(
     nSay("hello", 1),
     ["hello"],
@@ -199,26 +238,45 @@ test("Say N Times", (assert) => {
 });
 
 
-test("Euros to GB Pounds", (assert) => {
+test("Word Count", (assert) => {
   assert.explain(
-    `Write an 'eugb' function that accepts two parameters: an amount in
-     euros and an exchange rate.  It should return a number which is the
-     amount in pounds after conversion.`
+    `Create a 'wordCount' function that accepts a string and counts how
+     many words are in it.`
   );
-  assert.functionExists(
-    window.eugb,
-    2,
-    "Write an `eugb` function..."
+  if (!assert.functionExists('wordCount', 1)) return
+  assert.strictEqual(
+    wordCount("The cat sat on the mat"),
+    6,
+    "'The cat sat on the mat' has 6 words."
   );
   assert.strictEqual(
-    eugb(10, 0.9),
-    9,
-    "Ten euros at an exchange rate of 0.9gbp-to-1 euro gives £9."
+    wordCount("a a a a a"),
+    5,
+    "`a` appears 5 times, so there are 5 words."
+  );
+});
+
+
+test("Character Count", (assert) => {
+  assert.explain(
+    `Create a 'charCount' function that accepts a string and counts how many
+     non-whitespace characters are in it.`
+  );
+  if (!assert.functionExists('charCount', 1)) return;
+  assert.strictEqual(
+    charCount("The cat sat on the mat"),
+    17,
+    "`The cat sat on the mat` contains 17 non-whitespace characters."
   );
   assert.strictEqual(
-    eugb(1000, 1.337),
-    1337,
-    "One thousand euros at an exchange rate of 1.337-to-1 euro gives £1337."
+    charCount("a a a a a"),
+    5,
+    "`a` appears 5 times, so there are just 5 characters."
+  );
+  assert.strictEqual(
+    charCount("            X"),
+    1,
+    "All spaces must be ignored."
   );
 });
 
@@ -228,11 +286,11 @@ test("Acronyms", (assert) => {
     `Create an 'acronym' function that accepts a string of words and returns
      the acronym formed from the initial letter of each word.`
   );
-  assert.functionExists(window.acronym, 1);
+  if (!assert.functionExists('acronym', 1)) return;
   assert.strictEqual(
     acronym("North Atlantic Treaty Organisation"),
     "NATO",
-    "NATO is the acronym of the North Atlantic Treaty Organisation."
+    "Given 'North Atlantic Treaty Organisation', the function should return the acronym 'NATO'."
   );
   assert.strictEqual(
     acronym("Graphics Interchange Format"),
@@ -243,7 +301,7 @@ test("Acronyms", (assert) => {
   assert.strictEqual(
     acronym("Self Contained Underwater Breathing Apparatus"),
     "SCUBA",
-    "If the first two work, this one should too!"
+    "If the first two tests work, this one should too!"
   );
 });
 
@@ -252,14 +310,14 @@ test("Abbreviated Names", (assert) => {
   assert.explain(
     `Create an 'abbreviate' function that accpts an array of strings that
      represent someone's full name.  The function should return a version
-     of the name with all but the surname reduced to initial letters, and
-     each initial letter followed by a full stop.`
+     of the name with all but the last name reduced to initial letters, and
+     each initial letter followed by a full stop and a space.`
   );
-  assert.functionExists(window.abbreviate, 1);
+  if (!assert.functionExists('abbreviate', 1)) return;
   assert.strictEqual(
     abbreviate(["John", "Ronald", "Reuel", "Tolkien"]),
     "J. R. R. Tolkien",
-    "Abbreviating `John Ronald Reuel Tolkien` should give `J. R. R. Tolkien`."
+    "Abbreviating ['John', 'Ronald', 'Reuel', 'Tolkien'] should give `J. R. R. Tolkien`."
   );
   assert.strictEqual(
     abbreviate(["Johann", "Sebastian", "Bach"]),
@@ -285,10 +343,7 @@ test("Honours Classification", (assert) => {
        a string that describes the level of honours degree associated with
       that mark.`
   );
-  assert.functionExists(
-    window.honours,
-    1
-  );
+  if (!assert.functionExists('honours', 1)) return;
   assert.strictEqual(
     honours(70),
     "First",
@@ -342,16 +397,12 @@ test("Unique Words", (assert) => {
       `Create a 'uniqueWords' function that accepts a string and returns
        an array of all the unique words in that string.`
   );
-  assert.functionExists(
-    window.uniqueWords,
-    1,
-    "Create a 'uniqueWords' function..."
-  );
+  if (!assert.functionExists('uniqueWords', 1)) return;
   assert.deepEqual(
-    uniqueWords("The cat sat on the mat"),
+    uniqueWords("the cat sat on the mat"),
     ["the", "cat", "sat", "on", "mat"],
     `There are two instances of 'the' in 'the cat sat on the mat' - only
-     but one 'the' should be in the resulting array.`
+     one 'the' should be in the resulting array.`
   );
   assert.deepEqual(
     uniqueWords("a a a a a"),
@@ -362,22 +413,60 @@ test("Unique Words", (assert) => {
   assert.deepEqual(
     uniqueWords("there they're their"),
     ["there", "they're", "their"],
-    "There are three different words in this sentence."
+    "there, they're, and their are three different words."
   );
 
 });
 
 
+test("Compound Interest", (assert) => {
+  assert.explain(
+    `Create a 'compound' function that accepts a 'startAmount', a 'rate', and
+     a 'duration'.  It should calculate how startAmount increases over time
+     as interest is added.`
+  );
+  if (!assert.functionExists('compound', 3)) return;
+  assert.equal(
+    impreciseNumber(compound(10, 1.1, 1)),
+    impreciseNumber(11),
+    `A starting amount of £10, with an increase rate of 1.1 (which is 10% interest) for 1 year
+     resulting in an amount of £11.`
+  );
+  assert.equal(
+    impreciseNumber(compound(10, 1.1, 2)),
+    impreciseNumber(12.1),
+    `A starting amount of £10, with an increase rate of 1.1 (which is 10% interest) for 2 years
+     resulting in an amount of £12.10.`
+  );
+  assert.equal(
+    impreciseNumber(compound(10, 1.1, 10)),
+    impreciseNumber(25.937424601),
+    `A starting amount of £10, with an increase rate of 1.1 (which is 10% interest) for 10 years
+     resulting in an amount of about £25.94.`
+  );
+});
+
+function impreciseNumber(x) {
+  if (typeof x !== 'number') return x;
+  return Number(x.toPrecision(8));
+}
+
+
+// let's not put unique words II right after unique words because otherwise
+// when implementing unique words well, the test page hides unique words
+// and shows unique words II, but the change is subtle and it looks like
+// something about my unique words is wrong
 test("Unique Words II: Mixed Case Matching", (assert) => {
   assert.explain(
       `The 'uniqueWords' function should treat uppercase and
-       lowercase letters as if they are the same letter.`
+       lowercase letters as if they are the same letter, and only return
+       lowercase letters.`
   );
   assert.deepEqual(
     uniqueWords("The cat sat on the mat"),
     ["the", "cat", "sat", "on", "mat"],
-    `There are two instances of 'the' in 'the cat sat on the mat' - only
-     but one 'the' should be in the resulting array.`
+    `There are two instances of 'the' in 'The cat sat on the mat' - only
+     one 'the' should be in the resulting array.`
   );
   assert.deepEqual(
     uniqueWords("The THE thE the tHE"),
@@ -392,86 +481,48 @@ test("Unique Words II: Mixed Case Matching", (assert) => {
 
 
 
-test("Word Count", (assert) => {
+test("Word Game", (assert) => {
   assert.explain(
-    `Create a 'wordCount' function that accepts a string and counts how
-     many words are in it.`
+    `Create a function 'wordGame' that requires two string parameters:
+     'letters' and 'word'.  It should return true if the word can be
+     constructed using the characters in 'letters' and false if the
+     word requires characters not provided in 'letters'.  Note that
+     each character in 'letters' may only be used once when
+     constructing the word.`
   );
-  assert.functionExists(
-    window.wordCount,
-    1,
-    "Create a `wordCount` function..."
-  )
+  if (!assert.functionExists('wordGame', 2)) return;
   assert.strictEqual(
-    wordCount("The cat sat on the mat"),
-    6,
-    "The cat sat on the mat has 6 wordes."
+    wordGame("a", "a"),
+    true,
+    "The word `a` can be constructed from the characters `a`; so: true."
   );
   assert.strictEqual(
-    wordCount("a a a a a"),
-    5,
-    "`a` appears 5 times, so there are 5 words."
+    wordGame("a", "aaa"),
+    false,
+    "The word `aaa` cannot be constructed from the characters `a` (because two more `a` characters are needed); so: false."
+  );
+  assert.strictEqual(
+    wordGame("a", "b"),
+    false,
+    "The word `b` cannot be constructed from the characters `a`; so: false."
+  );
+  assert.strictEqual(
+    wordGame("actx", "cat"),
+    true,
+    "The word `cat` can be constructed from the letters `actx`; so: true."
+  );
+  assert.strictEqual(
+    wordGame("kpechtunx", "bucon"),
+    false,
+    "The word `bucon` cannot be constructed from the letters `kpechtunx`; so: false."
+  );
+  assert.strictEqual(
+    wordGame("cautioned", "education"),
+    true,
+    "The word `education` can be constructed from the letters `cautioned`; so: true."
   );
 });
 
-
-test("Chaeracter Count", (assert) => {
-  assert.explain(
-    `Create a 'charCount' function that accepts a string and counts how many
-     non-whitespace characters are in it.`
-  );
-  assert.functionExists(
-    window.charCount,
-    1,
-    `Create a 'charCount' function...`
-  );
-  assert.strictEqual(
-    charCount("The cat sat on the mat"),
-    17,
-    "The cat sat on the mat contains 17 non-whitespace characters."
-  );
-  assert.strictEqual(
-    charCount("a a a a a"),
-    5,
-    "`a` appears 5 times, so there are just 5 characters."
-  );
-  assert.strictEqual(
-    charCount("            X"),
-    1,
-    "There is just one character here."
-  );
-});
-
-test("Compound Interest", (assert) => {
-  assert.explain(
-    `Create a 'compound' function that accepts a 'startAmount', a 'rate', and
-     a 'duration'.  It should calculate how startAmount increases over time
-     as interest is added.`
-  );
-  assert.functionExists(
-    window.compound,
-    3,
-    "Create a 'compound' function..."
-  );
-  assert.strictEqual(
-    compound(10, 1.1, 1),
-    11,
-    `A starting amount of £10, with an interest rate of 1.1% for 1 year
-     resulting in an amount of £11.`
-  );
-  assert.strictEqual(
-    compound(10, 1.1, 2),
-    12.100000000000001,
-    `A starting amount of £10, with an interest rate of 1.1% for 2 years
-     resulting in an amount of £12.10`
-  );
-  assert.strictEqual(
-    compound(10, 1.1, 10),
-    25.937424601000018,
-    `A starting amount of £10, with an interest rate of 1.1% for 10 years
-     resulting in an amount of £25.93`
-  );
-});
 
 test("Can I Pay With Coins?", (assert) => {
   assert.explain(
@@ -480,11 +531,7 @@ test("Can I Pay With Coins?", (assert) => {
     or all of the coin values in the array.  Arrays will always be provided
     sorted with the larger values before smaller ones.`
   );
-  assert.functionExists(
-    window.pocketCoins,
-    2,
-    "Create a `pocketCoins` function..."
-  );
+  if (!assert.functionExists('pocketCoins', 2)) return;
   assert.strictEqual(
     pocketCoins([10, 10, 10], 30),
     true,
@@ -542,52 +589,5 @@ test("Can I Pay With Coins?", (assert) => {
     pocketCoins([], 0),
     true,
     "Given no coins, 0 can reached."
-  );
-});
-
-
-test("Word Game", (assert) => {
-  assert.explain(
-    `Create a function 'wordGame' that requires two string parameters:
-     'letters' and 'word'.  It should return true if the word can be
-     constructed using the characters in 'letters' and false if the
-     word requires characters not provided in 'letters'.  Note that
-     each character in 'letters' may only be used once when
-     constructing a word.`
-  );
-  assert.functionExists(
-    window.wordGame,
-    2,
-    `Create a function 'wordGame'...`
-  );
-  assert.strictEqual(
-    wordGame("a", "a"),
-    true,
-    "The word `a` can be constructed from the characters `a`; so: true."
-  );
-  assert.strictEqual(
-    wordGame("a", "aaa"),
-    false,
-    "The word `aaa` can be constructed from the characters `a` (because two more `a` characters are needed); so: false."
-  );
-  assert.strictEqual(
-    wordGame("a", "b"),
-    false,
-    "The word `b` cannot be constructed from the characters `a`; so: false."
-  );
-  assert.strictEqual(
-    wordGame("actx", "cat"),
-    true,
-    "The word `cat` can be constructed from the letters `actx`; so: true."
-  );
-  assert.strictEqual(
-    wordGame("kpechtunx", "bucon"),
-    false,
-    "The word `bucon` cannot be construced from the letters `kpechtunx`; so: false."
-  );
-  assert.strictEqual(
-    wordGame("cautioned", "education"),
-    true,
-    "The word `education` can be construced from the letters `cautioned`; so: true."
   );
 });
