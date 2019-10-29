@@ -38,6 +38,11 @@ QUnit.assert.explain = function (message, result = true) {
   });
 };
 
+if (window.globalErrors.length > 0) {
+  test("Global Error", (assert) => {
+    assert.explain('There has been a global error, most probably a syntax error. Look in the Javascript console for details.', false);
+  });
+}
 
 test("Easy Start", (assert) => {
   assert.explain(
