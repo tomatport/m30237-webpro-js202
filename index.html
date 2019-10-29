@@ -9,6 +9,13 @@
 </div>
 <div id="qunit-fixture"></div>
 
+<script>
+window.globalErrors = [];
+window.addEventListener('error', (e) => {
+  window.globalErrors.push(e);
+  e.stopImmediatePropagation();
+});
+</script>
 <script src="qunit-2.9.2.js"></script>
 <script src="index.js"></script>
 <script src="tests.js"></script>
