@@ -6,7 +6,7 @@ QUnit.config.reorder = false;
 // Credit: https://github.com/goatslacker/get-parameter-names
 function getArgNames(fn = "") {
   const COMMENTS = /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/mg;
-  const DEFAULT_PARAMS = /=[^,]+/mg;
+  const DEFAULT_PARAMS = /=[^,)]+/mg;
   const FAT_ARROWS = /=>.*$/mg;
   const code = fn.toString()
     .replace(COMMENTS, '')
