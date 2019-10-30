@@ -13,16 +13,16 @@
 
 :root {
   --cue: 0.5rem;
-  --rad: 0.5rem;
+  --rad: 0.25rem;
   --radSmall: 0.25rem;
   --pad: 0.3rem;
   --reddark: #710909;
-  --redlight: #FF5757;
+  --redlight: #dddddd;
   --greendarkmax: #374E0C;
   --greendark: #5E740B;
   --greenlight: #C6E746;
   --bluepassx: #00AEEF;
-  --bluepassbg: rgba(82, 140, 224, 0.35);
+  --bluepassbg: rgba(82, 224, 80, 0.35);
   --bluepassbgorig: #D2E0E6;
   --banner: #621360;
 }
@@ -166,9 +166,12 @@
 }
 
 #qunit-modulefilter-dropdown .clickable.checked {
-	font-weight: bold;
 	color: #000;
 	background-color: var(--bluepassbg);
+}
+
+strong, b {
+  font-weight: normal;
 }
 
 #qunit-modulefilter-dropdown .clickable:hover {
@@ -229,10 +232,10 @@
 }
 
 #qunit-tests li {
-	padding: 0.4em 1em 0.4em 1em;
-	border-bottom: 1px solid #FFF;
+	padding: 0.6em 1em;
 	list-style-position: inside;
 	border-radius: var(--rad);
+  margin-top: .5rem  ;
 }
 
 #qunit-tests > li {
@@ -272,7 +275,7 @@
 
 #qunit-tests li a {
 	padding: 0.5em;
-	color: #C2CCD1;
+	color: #888;
 	text-decoration: none;
 }
 
@@ -345,7 +348,7 @@
 
 /*** Test Counts */
 
-#qunit-tests b.counts                       { color: #000; }
+#qunit-tests b.counts                       { color: #000; display: none; }
 #qunit-tests b.passed                       { color: var(--greendark); }
 #qunit-tests b.failed                       { color: var(--reddark); }
 
@@ -365,7 +368,7 @@
 }
 
 #qunit-tests .pass                          { color: var(--bluepass); background-color: var(--bluepassbg); }
-#qunit-tests .pass .test-name               { color: #366097; }
+#qunit-tests .pass .test-name               { color: black; line-height: 133%; }
 
 #qunit-tests .pass .test-actual,
 #qunit-tests .pass .test-expected           { color: #999; }
@@ -384,7 +387,7 @@
 #qunit-tests .fail .test-name,
 #qunit-tests .fail .module-name             { color: #000; }
 
-#qunit-tests .fail .test-actual             { color: var(--redlight); }
+#qunit-tests .fail .test-actual             { color: var(--reddark); }
 #qunit-tests .fail .test-expected           { color: #008000; }
 
 #qunit-banner.qunit-fail                    { background-color: var(--redlight); }
@@ -420,6 +423,7 @@
 	background-color: var(--bluepassbg);
   border-bottom: 1px solid #FFF;
   border-radius: 0 0 var(--rad) var(--rad);
+  display: none;
 
 }
 #qunit-testresult .clearfix {
