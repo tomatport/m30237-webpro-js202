@@ -431,28 +431,28 @@ test(`Unique Words: Create a 'uniqueWords' function that accepts a string 'str' 
 
 
 test(`Compound Interest: Create a 'compound' function that accepts a 'startAmount', a 'rate', and
-     a 'duration'.  It should calculate how startAmount increases over time
-     as interest is added.`, (assert) => {
-  if (!assert.functionExists('compound', ['startAmount', 'rate', 'duration'])) return;
+     a number of 'years'.  It should calculate how startAmount increases over time
+     as interest is added each year.`, (assert) => {
+  if (!assert.functionExists('compound', ['startAmount', 'rate', 'years'])) return;
 
   assert.equal(
     impreciseNumber(compound(10, 1.1, 1)),
     impreciseNumber(11),
-    `A starting amount of £10, with an increase rate of 1.1 (which is 10% interest) for 1 year
+    `A starting amount of £10, with an increase rate of 1.1 (which is 10% interest per year) for 1 year
      resulting in an amount of £11.`
   );
 
   assert.equal(
     impreciseNumber(compound(10, 1.1, 2)),
     impreciseNumber(12.1),
-    `A starting amount of £10, with an increase rate of 1.1 (which is 10% interest) for 2 years
+    `A starting amount of £10, with an increase rate of 1.1 (which is 10% interest per year) for 2 years
      resulting in an amount of £12.10.`
   );
 
   assert.equal(
     impreciseNumber(compound(10, 1.1, 10)),
     impreciseNumber(25.937424601),
-    `A starting amount of £10, with an increase rate of 1.1 (which is 10% interest) for 10 years
+    `A starting amount of £10, with an increase rate of 1.1 (which is 10% interest per year) for 10 years
      resulting in an amount of about £25.94.`
   );
 });
