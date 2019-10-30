@@ -79,7 +79,7 @@ if (window.globalErrors.length > 0) {
 }
 
 test(
-  `Easy Start: Complete the "easyStart" function so that it always
+  `Easy Start: Complete the 'easyStart' function so that it always
   returns true.`, (assert) => {
 
   if (!assert.functionExists('easyStart')) return;
@@ -87,7 +87,7 @@ test(
   assert.strictEqual(
     easyStart(),
     true,
-    `The "easyStart" function should return true
+    `The 'easyStart' function should return true
      when passed no parameters.`
   );
 
@@ -110,7 +110,7 @@ test(
   assert.strictEqual(
     helloWorld(),
     "hello world",
-    "The helloWorld function should return 'hello world'."
+    `The helloWorld function should return "hello world".`
   );
 
   assert.strictEqual(
@@ -124,9 +124,9 @@ test(
 
 
 test(
-  `Numbers To Array: Change the numToArray function so that so
+  `Numbers To Array: Change the 'numToArray' function so
   that instead of creating an array of numbers
-  from zero to 'limit', it creates an array of
+  from 0 to 'limit', it creates an array of
   numbers counting down from 'limit' to 1.`, (assert) => {
 
   if (!assert.functionExists( 'numToArray', ['limit'] )) return;
@@ -153,45 +153,45 @@ test(
 
 
 test(
-  `Hello World 2: Create the function "hw2" which returns an
-  array of the strings 'hello' and 'world'.`, (assert) => {
+  `Hello World 2: Create the function 'hw2' which returns an
+  array of the strings "hello" and "world".`, (assert) => {
 
   if (!assert.functionExists('hw2')) return;
 
   assert.deepEqual(
     hw2(),
     ["hello", "world"],
-    `The hw2 function should return an array where the first word
-     is 'hello' and the second word is 'world'`
+    `The 'hw2' function should return an array where the first word
+     is "hello" and the second word is "world".`
   );
 
   assert.strictEqual(
     hw2().length,
     2,
-    "The hw2 function should return an array of only two strings."
+    "The 'hw2' function should return an array of only two strings."
   );
 
 });
 
 
 test(
-  `Greetings: Create a 'greet' function that accepts a name parameter
-  and returns the string 'Hello <name> how are you?'.`, (assert) => {
+  `Greetings: Create a 'greet' function that accepts a 'name' parameter
+  and returns the string "Hello <name> how are you?".`, (assert) => {
 
   if (!assert.functionExists('greet', ["name"])) return;
 
   assert.strictEqual(
     greet("Tricia"),
     "Hello Tricia how are you?",
-    `The greet function for 'Tricia' should return
-     'Hello Tricia how are you?'`
+    `Calling greet("Tricia") should return
+     "Hello Tricia how are you?"`
   );
 
   assert.strictEqual(
-    greet("Arthur"),
-    "Hello Arthur how are you?",
-    `The greet function for 'Zaphod' should return
-     'Hello Zaphod how are you?'`
+    greet("Zaphod"),
+    "Hello Zaphod how are you?",
+    `Calling greet("Zaphod") should return
+     "Hello Zaphod how are you?"`
   );
 
 });
@@ -199,27 +199,27 @@ test(
 
 test(
   `A Positive Sign: Create a 'sign' function that accepts one parameter 'x'
-  and returns the string 'positive' for x > 0, and the string
-  'negative' for x < 0.`, (assert) => {
+  and returns the string "positive" for x > 0, and the string
+  "negative" for x < 0.`, (assert) => {
 
   if (!assert.functionExists('sign', ["x"])) return;
 
   assert.strictEqual(
     sign(10),
     "positive",
-    "10 is positive, so return 'positive'",
+    `10 is positive, so return "positive"`
   );
 
   assert.strictEqual(
     sign(-1),
     "negative",
-    "-1 is negative, so return 'negative'",
+    `-1 is negative, so return "negative"`
   );
 
   assert.strictEqual(
     sign(-49.3),
     "negative",
-    "If the first two tests work, this one should too!"
+    `If the first two tests work, this one should too!`
   );
 
 });
@@ -227,9 +227,9 @@ test(
 
 test(
   `Euros to GB Pounds: Write an 'eugb' function that accepts two
-  parameters: an amount in euros and an exchange rate of how many pounds
-  you get for a euro.  It should return a number which is the amount in
-  pounds after conversion.`, (assert) => {
+  parameters, 'rate and 'euros' representing an amount in euros and an
+  exchange rate of how many pounds one euro is worth.  It should return
+  a number which is the amount in pounds after conversion.`, (assert) => {
 
   if (!assert.functionExists('eugb', ["euros", "rate"])) return;
 
@@ -242,7 +242,8 @@ test(
   assert.strictEqual(
     eugb(1000, 1.337),
     1337,
-    "One thousand euros at an exchange rate of 1.337 GBP per EURO gives £1337."
+    `One thousand euros at an exchange rate of
+    1.337 GBP per EURO gives £1337.`
   );
 
 });
@@ -250,7 +251,7 @@ test(
 
 test(
   `Say N Times: Write an 'nSay' function that accepts two parameters, a
-  message 'msg' and a number 'n'.  'nSay' should return an array that
+  message 'msg' and a number 'n'.  nSay should return an array that
   contains n copies of the value of msg.`, (assert) => {
 
   if (!assert.functionExists('nSay', ["msg", "n"])) return;
@@ -258,15 +259,14 @@ test(
   assert.deepEqual(
     nSay("hello", 1),
     ["hello"],
-    `Calling 'nSay' with a string of 'hello' and a number 1, should return an
-     array with one 'hello'.`
+    `Calling nSay("hello",1) should return an array of one "hello".`
   );
 
   assert.deepEqual(
     nSay("badger", 3),
     ["badger", "badger", "badger"],
-    `Calling 'nSay' with a string of 'badger' and a number 3, should return an
-     array of three strings, each saying 'badger'.`
+    `Calling nSay("badger",3) should return an
+     array of three strings, each saying "badger".`
   );
 
 });
@@ -665,12 +665,6 @@ test(
   );
 
   assert.strictEqual(
-    pocketCoins([5, 2, 2, 2], 6),
-    true,
-    `Given a five and three twos, 6 can be reached exactly.`
-  );
-
-  assert.strictEqual(
     pocketCoins([], 17),
     false,
     "Given no coins, 17 CANNOT be reached."
@@ -680,6 +674,12 @@ test(
     pocketCoins([], 0),
     true,
     "Given no coins, 0 can reached."
+  );
+
+  assert.strictEqual(
+    pocketCoins([5, 2, 2, 2], 6),
+    true,
+    `Given a five and three twos, 6 can be reached exactly.`
   );
 
 });
