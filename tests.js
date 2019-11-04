@@ -105,7 +105,7 @@ test(
   `Hello World: Complete the 'helloWorld' function so that so that it
   always returns the string "hello world".`, (assert) => {
 
-  if (assert.functionExists('helloWorld')) return;
+  if (!assert.functionExists('helloWorld')) return;
 
   assert.strictEqual(
     helloWorld(),
