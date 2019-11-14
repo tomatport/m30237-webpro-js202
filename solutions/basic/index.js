@@ -12,8 +12,8 @@ function easyStart() {
 
 /**
  * Hello World
- * Complete the 'helloWorld' function so that so that it always
- * returns the string "hello world".
+ * Complete the 'helloWorld' function so that so that
+ * it always returns the string "hello world".
  */
 function helloWorld() {
   return "hello world";
@@ -28,14 +28,19 @@ function helloWorld() {
  * 'limit' to 1.
  */
 function numToArray(limit) {
+
   // create an array for the result
   const result = [];
+
   // start at the limit and work backwards
-  // (using i-1) until i is 1.
+  // (using i=i-1) until i is 1.
+
   for (let i=limit; i>=1; i=i-1) {
-    // add the current value of i to the result array
+    // add the current value of i
+    // to the result array
     result.push(i)
   }
+
   return result;
 }
 
@@ -47,6 +52,13 @@ function numToArray(limit) {
  */
 function hw2() {
   return ["hello", "world"];
+
+  // Alternatively...
+  //
+  // const result = [];
+  // result.push("hello");
+  // result.push("world");
+  // return result;
 }
 
 
@@ -59,8 +71,11 @@ function greet(name) {
   // use a backtick delimited 'template literal' to
   // construct the required sentence.  A single
   // placeholder ${name} is used.
-  // alternatively: return "Hello " + name + " how are you?`"
   return `Hello ${name} how are you?`
+
+  // Alternatively...
+  // return "Hello " + name + " how are you?`"
+
 }
 
 /**
@@ -100,10 +115,15 @@ function eugb(euros, rate) {
  * an array that contains n copies of the value of msg.
  */
 function nSay(msg, n) {
+  // create an array for the results
   const result = [];
+
+  // loop n times - we don't actually use i. 
   for (let i=0; i<n; i++) {
-      result.push(msg)
-    }
+    // add the message to the array
+    result.push(msg)
+  }
+
   return result;
 }
 
@@ -117,7 +137,9 @@ function wordCount(str) {
   // The array length property == how many words there are.
   return str.split(" ").length;
 
-  // alternatively, you could loop and look for spaces
+  // Alternatively...
+  // Loop and look for spaces
+  //
   // let words = 1;
   // for (const x of str) {
   //   if (x == " ") {
@@ -134,13 +156,14 @@ function wordCount(str) {
  * and counts how many non-whitespace characters are in it.
  */
 function charCount(str) {
-  // this is a cheeky solution.  Our wordCount function
+  // This is a cheeky solution.  Our wordCount function
   // tells us how many words there are, so there must be
   // a whitespace between each word.  If there are six
   // words there will be five spaces.  We calcuate that
   // number (in brackets) then subtract it from the length
   // of the string to return the number of non-whitespace
-  // characters. 
+  // characters.  #workSmarterNotHarder
+
   return str.length - (wordCount(str) -1);
 }
 
@@ -153,7 +176,7 @@ function charCount(str) {
  * formed from the initial letter of each word.
  */
 function acronym(str) {
-  //break up the string into an array of words
+  // break up the string into an array of words
   const words = str.split(" ");
 
   // prep an empty result string
@@ -161,6 +184,7 @@ function acronym(str) {
 
   // loop over the array of words one word at a time
   for (const word of words) {
+
     // add the first character from the word (which
     // is in position zero) to the result string
     result += word[0];
@@ -181,10 +205,28 @@ function acronym(str) {
  * letter followed by a full stop and a space.
  */
 function abbreviate(arr) {
+
+  // create a result string
   let result = "";
+
+  // loop over the array stopping short of the last item.
+  // note: if there's only one item, the code in this loop
+  // won't run because 1-1 is 0, and i is immediately not
+  // less than 0 
   for (let i=0; i< arr.length-1; i++) {
-    result = result + arr[i][0] + ". ";
+
+    // get the current word 
+    const word = arr[i];
+
+    // get the first character of that word
+    const char = word[0];
+
+    // append the character and fullstop
+    result = result + char + ". ";
   }
+
+  // finally append the last word
+  // and return the completed name
   return result + arr[arr.length-1];
 }
 
