@@ -23,7 +23,7 @@ function helloWorld() {
 /**
  * Numbers To Array
  * Change the 'numToArray' function so that instead of
- * creating an array of numbers from 0 to 'limit', 
+ * creating an array of numbers from 0 to 'limit',
  * it creates an array of numbers counting down from
  * 'limit' to 1.
  */
@@ -47,7 +47,7 @@ function numToArray(limit) {
 
 /**
  * Hello World 2
- * Create the function 'hw2' which returns 
+ * Create the function 'hw2' which returns
  * an array of the strings "hello" and "world"
  */
 function hw2() {
@@ -80,7 +80,7 @@ function greet(name) {
 
 /**
  * A Positive Sign
- * Create a 'sign' function that accepts one parameter 'x' 
+ * Create a 'sign' function that accepts one parameter 'x'
  * and returns the string "positive" for x > 0, and
  * the string "negative" for x < 0.
  */
@@ -118,7 +118,7 @@ function nSay(msg, n) {
   // create an array for the results
   const result = [];
 
-  // loop n times - we don't actually use i. 
+  // loop n times - we don't actually use i.
   for (let i=0; i<n; i++) {
     // add the message to the array
     result.push(msg)
@@ -212,10 +212,10 @@ function abbreviate(arr) {
   // loop over the array stopping short of the last item.
   // note: if there's only one item, the code in this loop
   // won't run because 1-1 is 0, and i is immediately not
-  // less than 0 
+  // less than 0
   for (let i=0; i< arr.length-1; i++) {
 
-    // get the current word 
+    // get the current word
     const word = arr[i];
 
     // get the first character of that word
@@ -250,11 +250,11 @@ function honours(mark) {
 }
 
 /**
- * Unique Words: 
+ * Unique Words:
  * reate a 'uniqueWords' function that accepts
  * a string 'str' and returns an array of all
  * the unique words in that string.
- * 
+ *
  * Unique Words II: Mixed Case Matching
  * The 'uniqueWords' function should treat
  * uppercase and lowercase letters as if they
@@ -272,12 +272,12 @@ function uniqueWords(str) {
   // loop over each word
   for (let word of splitStr) {
 
-    // convert the current word to lowercase 
+    // convert the current word to lowercase
     let lcword = word.toLowerCase();
 
     // if our lowercase word is not in the
     // results array already, add it (this
-    // means we don't get repeat words). 
+    // means we don't get repeat words).
     if (!result.includes(lcword)) {
       result.push(lcword);
     }
@@ -302,7 +302,7 @@ function compound(startAmount, rate, years) {
 }
 
 
-/** 
+/**
  * Word Game
  * Create a function 'wordGame' that requires two
  * string parameters: 'letters' and 'word'.
@@ -329,12 +329,12 @@ function wordGame(letters, word) {
       // a -1 position means it's not there
       // sp the target word cannot be made
       return false;
-    }                     
+    }
 
     // a used letter should be set to null (i.e. removed
     // from the available pool so that it cannot be used
-    // a second time            
-    letterArray[i] = null; 
+    // a second time
+    letterArray[i] = null;
   }
 
   // if we haven't returned yet we have checked
@@ -346,7 +346,7 @@ function wordGame(letters, word) {
 /**
  * Pay With Coins
  * Create a 'pocketCoins' function that accepts
- * an array of 'coinValues' and an amount, and 
+ * an array of 'coinValues' and an amount, and
  * returns true if the amount can be equalled
  * by adding some or all of the coin values
  * in the array.  Arrays will always be provided
@@ -356,11 +356,11 @@ function pocketCoins(coinValues, amount) {
 
   // This is a recursive solution, it works by
   // reducing the target using the available coins
-  // until a solution is reached.   
+  // until a solution is reached.
 
   // If pocketCoins is called with a target amount
   // of zero, that value *can* be reached using no
-  // coins, so return true. 
+  // coins, so return true.
   if (amount===0) return true;
 
   // If pocketCoins is called with a target amount
