@@ -41,6 +41,15 @@ function numToArray(limit) {
     result.push(i)
   }
 
+  // alternatively to the loop above:
+  // start at zero and work up to the limit - 1
+  // which is the usual direction for a for loop
+  //
+  // for (let i=0; i<limit; i=i+1) {
+  //   // add a decreasing number to the result array
+  //   result.push(limit-i)
+  // }
+
   return result;
 }
 
@@ -74,9 +83,9 @@ function greet(name) {
   return `Hello ${name} how are you?`
 
   // Alternatively...
-  // return "Hello " + name + " how are you?`"
-
+  // return "Hello " + name + " how are you?"
 }
+
 
 /**
  * A Positive Sign
@@ -87,11 +96,11 @@ function greet(name) {
 function sign(x) {
   if (x>0) {
     return "positive";
-  }
-  if (x<0) {
+  } else {
+    // NB: we do not specify the behaviour for the case of x===0
+    // therefore regurning "negative" for 0 is OK
     return "negative";
   }
-  // NB: we do not test for the case of x===0
 }
 
 
@@ -118,7 +127,7 @@ function nSay(msg, n) {
   // create an array for the results
   const result = [];
 
-  // loop n times - we don't actually use i.
+  // loop n times
   for (let i=0; i<n; i++) {
     // add the message to the array
     result.push(msg)
@@ -133,8 +142,8 @@ function nSay(msg, n) {
  * 'str' and counts how many words are in it.
  */
 function wordCount(str) {
-  // splitting the string on space gives an array.
-  // The array length property == how many words there are.
+  // splitting the string on space gives an array of words,
+  // so the array length reflects how many words there are.
   return str.split(" ").length;
 
   // Alternatively...
@@ -156,15 +165,34 @@ function wordCount(str) {
  * and counts how many non-whitespace characters are in it.
  */
 function charCount(str) {
+  // the count of non-spaces starts at 0
+  let result = 0;
+
+  // loop over the string one character at a time
+  for (const ch of str) {
+
+    if (ch !== ' ') {
+      // if the character isn't a space,
+      // increase the count of non-spaces
+      result += 1;
+    }
+  }
+  return result;
+
+  // Alternatively...
   // This is a cheeky solution.  Our wordCount function
   // tells us how many words there are, so there must be
   // a whitespace between each word.  If there are six
   // words there will be five spaces.  We calcuate that
   // number (in brackets) then subtract it from the length
   // of the string to return the number of non-whitespace
-  // characters.  #workSmarterNotHarder
+  // characters.
+  // This solution would actually not work if we had multiple
+  // repeated spaces in the test strings, e.g.
+  // charCount('a   b') should return 2 but this solution would
+  // return 3
 
-  return str.length - (wordCount(str) -1);
+  // return str.length - (wordCount(str) -1);
 }
 
 
@@ -213,7 +241,7 @@ function abbreviate(arr) {
   // note: if there's only one item, the code in this loop
   // won't run because 1-1 is 0, and i is immediately not
   // less than 0
-  for (let i=0; i< arr.length-1; i++) {
+  for (let i=0; i < arr.length-1; i+=1) {
 
     // get the current word
     const word = arr[i];
@@ -226,8 +254,10 @@ function abbreviate(arr) {
   }
 
   // finally append the last word
+  result = result + arr[arr.length-1];
+
   // and return the completed name
-  return result + arr[arr.length-1];
+  return result;
 }
 
 
@@ -267,10 +297,10 @@ function uniqueWords(str) {
   const result = [];
 
   // break up the sentence into individual words
-  const splitStr = str.split(" ");
+  const words = str.split(" ");
 
   // loop over each word
-  for (let word of splitStr) {
+  for (const word of words) {
 
     // convert the current word to lowercase
     let lcword = word.toLowerCase();
@@ -295,10 +325,16 @@ function uniqueWords(str) {
  * over time as interest is added each year.
  */
 function compound(startAmount, rate, years) {
-  for (let i = 0; i<years; i++) {
+  // every year, we add interest to the initial amount
+  for (let i=0; i<years; i++) {
     startAmount = startAmount*rate;
   }
   return startAmount;
+
+  // Alternatively...
+  // this uses exponentiation
+
+  // return rate ** years * startAmount;
 }
 
 
@@ -326,8 +362,8 @@ function wordGame(letters, word) {
     let i=letterArray.indexOf(char);
 
     if (i === -1) {
-      // a -1 position means it's not there
-      // sp the target word cannot be made
+      // a -1 index means char is not in letterArray
+      // so the target word cannot be made
       return false;
     }
 
@@ -338,7 +374,8 @@ function wordGame(letters, word) {
   }
 
   // if we haven't returned yet we have checked
-  // all letters and not returned false, so...
+  // all characters and not returned false, so the word can
+  // be constructed with the provided letters
   return true;
 }
 
@@ -361,31 +398,30 @@ function pocketCoins(coinValues, amount) {
   // If pocketCoins is called with a target amount
   // of zero, that value *can* be reached using no
   // coins, so return true.
-  if (amount===0) return true;
+  if (amount === 0) return true;
 
   // If pocketCoins is called with a target amount
   // that is negative, then no amount of coins can help
   // so return false.
-  if (amount<0) return false;
+  if (amount < 0) return false;
 
-  // If there are coins left.
-  if (coinValues.length>0) {
+  // If there are no coins left, we cannot make the target
+  if (coinValues.length === 0) return false;
 
-    // make a copy of the array and call it rest
-    const rest = [...coinValues];
+  // make a short-name binding `first` for the first coin
+  const first = coinValues[0];
 
-    // remove the first coin leaving the rest in the new array
-    const first = rest.shift();
+  // make a copy of the array except the first coin
+  const rest = coinValues.slice(1);
 
-    // now call pocketCoins *twice*, the first time it's
-    // called having subtracted the value of the first coin from
-    // the target amount.  the second time, it's called having
-    // discarded that coin, leaving the amount unchanged, so that
-    // pocketCoins can try to get to zero with the rest of the coins.
-    // the result of the two calls is combined with a logical OR,
-    // so if either of these calls returns true, this function
-    // will also return true.
-    return pocketCoins(rest, amount-first) || pocketCoins(rest, amount);
-  }
-  return false;
+  // now call pocketCoins *twice*
+  // now try if we can use the first coin and with the rest of the coins,
+  // make the remaining amount
+  // NB: if the first coin is bigger than the amount we're trying to make,
+  // amount-first will become negative, which we catch above
+  if (pocketCoins(rest, amount-first)) return true;
+
+  // if we couldn't use the first coin, try to make the amount
+  // with only the remaining coins
+  return pocketCoins(rest, amount);
 }
