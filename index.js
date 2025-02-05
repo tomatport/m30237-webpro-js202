@@ -116,3 +116,13 @@ function compound(startAmount, rate, years) {
   }
   return amount;
 }
+
+// 17. Word Game: Create a function 'wordGame' that requires two string parameters: 'letters' and 'word'. It should return true if the word can be constructed using the characters in 'letters' and false if the word requires characters not provided in 'letters'. Note that each character in 'letters' may only be used once when constructing the word.
+function wordGame(letters, word) {
+  // TODO: account for multiple letters being required
+  for (const letter of word.split('')) {
+    if (!letters.includes(letter)) return false;
+    letters.
+  }
+  return true;
+}
