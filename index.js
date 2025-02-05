@@ -136,5 +136,5 @@ function wordGame(letters, word) {
 
 // 18. Pay With Coins: Create a 'pocketCoins' function that accepts an array of 'coinValues' and an amount, and returns true if the amount can be equalled by adding some or all of the coin values in the array. Arrays will always be provided sorted with the larger values before smaller ones.
 function pocketCoins(coinValues, amount) {
-
+  // TODO: finish me!
 }
