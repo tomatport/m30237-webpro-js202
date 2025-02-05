@@ -12,5 +12,16 @@
   "license": "UNLICENSED",
   "jshintConfig": {
     "globalstrict": true
+  },
+  "dependencies": {
+    "eslint": "^8.57.1",
+    "eslint-config-portsoc": "^1.0.1"
+  },
+  "eslintConfig": {
+    "extends": "portsoc",
+    "root": true,
+    "env": {
+      "browser": true
+    }
   }
 }
