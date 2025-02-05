@@ -121,7 +121,6 @@ function compound(startAmount, rate, years) {
 function wordGame(letters, word) {
   const givenLetters = letters.split('');
   for (const letter of word) {
-    console.log(word, letter, givenLetters);
     // get position of letter in given letters, if it is there
     const letterIndex = givenLetters.indexOf(letter);
     if (letterIndex > -1) {
@@ -133,4 +132,9 @@ function wordGame(letters, word) {
     }
   }
   return true;
+}
+
+// 18. Pay With Coins: Create a 'pocketCoins' function that accepts an array of 'coinValues' and an amount, and returns true if the amount can be equalled by adding some or all of the coin values in the array. Arrays will always be provided sorted with the larger values before smaller ones.
+function pocketCoins(coinValues, amount) {
+
 }
