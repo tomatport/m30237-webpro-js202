@@ -99,10 +99,20 @@ function honours(mark) {
 }
 
 // 14. Unique Words: Create a 'uniqueWords' function that accepts a string 'str' and returns an array of all the unique words in that string.
+// 16. Unique Words II: Mixed Case Matching: The 'uniqueWords' function should treat uppercase and lowercase letters as if they are the same letter, and only return lowercase letters
 function uniqueWords(str) {
   const seenWords = [];
-  for (const word of str.split(' ')) {
+  for (const word of str.toLowerCase().split(' ')) {
     if (!seenWords.includes(word)) seenWords.push(word);
   }
   return seenWords;
+}
+
+// 15. Compound Interest: Create a 'compound' function that accepts a 'startAmount', a 'rate', and a number of 'years'. It should calculate how startAmount increases over time as interest is added each year.
+function compound(startAmount, rate, years) {
+  let amount = startAmount;
+  for (let year = 0; year <= (years - 1); year++) {
+    amount = amount * rate;
+  }
+  return amount;
 }
