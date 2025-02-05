@@ -76,3 +76,33 @@ function acronym(str) {
 
   return acc;
 }
+
+// 12. Abbreviated Names: Create an 'abbreviate' function that accpts an array of strings 'arr' that represent someone's full name. The function should return a version of the name with all but the last name reduced to initial letters, and each initial letter followed by a full stop and a space.
+function abbreviate(arr) {
+  let outName = '';
+  // loop over all names except the last one
+  for (const name of arr.slice(0, arr.length - 1)) {
+    outName += `${name[0].toUpperCase()}. `;
+  }
+  // add the last name
+  outName += arr.at(-1);
+  return outName;
+}
+
+// 13. Honours Classification: Create an 'honours' function that accepts a number 'mark' and returns a string that describes the level of honours degree associated with that mark.
+function honours(mark) {
+  if (mark >= 70) return 'First';
+  if (mark >= 60) return 'Upper Second';
+  if (mark >= 50) return 'Lower Second';
+  if (mark >= 40) return 'Third';
+  return 'Fail';
+}
+
+// 14. Unique Words: Create a 'uniqueWords' function that accepts a string 'str' and returns an array of all the unique words in that string.
+function uniqueWords(str) {
+  const seenWords = [];
+  for (const word of str.split(' ')) {
+    if (!seenWords.includes(word)) seenWords.push(word);
+  }
+  return seenWords;
+}
